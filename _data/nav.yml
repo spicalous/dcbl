@@ -1,0 +1,13 @@
+items:
+  - title: HOME
+    url: /
+  - title: VENUE
+    url: /venue
+  - title: RSVP
+    url: /rsvp
+  - title: SCHEDULE
+    url: /schedule
+  - title: INFO
+    url: /info
+  - title: REGISTRY
+    url: /registry

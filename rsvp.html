@@ -1,0 +1,28 @@
+---
+layout: base
+title: RSVP | DCBL Wedding
+---
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <form>
+        <div class="form-group">
+          <label for="input-rsvp-id">RSVP ID</label>
+          <input type="text" class="form-control" id="input-rsvp-id" aria-describedby="help-rsvp-id" required minlength="5" maxlength="5" pattern="[a-zA-Z]{5}">
+          <div class="invalid-feedback"></div>
+          <small id="help-rsvp-id" class="form-text text-muted">You can find this on your invite. Please email <a href="mailto:DCBLwedding@hotmail.com">DCBLwedding@hotmail.com</a> if you have any issues.</small>
+        </div>
+        <button type="button" id="btn-rsvp-submit" class="btn btn-primary">
+          Submit
+        </button>
+        <button type="button" id="btn-rsvp-submit-loading" class="btn btn-primary d-none" disabled>
+          Verifying
+          <span class="spinner-border spinner-border-sm text-light" role="status" aria-hidden="true"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-auth.js"></script>
+<script src="/assets/js/rsvp.js"></script>

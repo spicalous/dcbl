@@ -1,0 +1,29 @@
+---
+layout: base
+title: RSVP | DCBL Wedding
+---
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <form>
+        {% include single-rsvp.html name="Ben Lertlumprasertkul" index=1 %}
+        {% include single-rsvp.html name="Daphne Cheung" index=2 %}
+        <div class="form-group">
+          <label for="exampleFormControlSelect2">Number of children under 12</label>
+          <select class="form-control" id="exampleFormControlSelect2">
+            <option>0</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-firestore.js"></script>
+<script src="/assets/js/rsvp-form.js"></script>
