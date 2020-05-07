@@ -23,6 +23,16 @@ description: >-
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
+apiKey: "AIzaSyBHXUu-oaBHd94QDzNgHWtP8KfEnGUhkEY"
+authDomain: "dcbl-test.firebaseapp.com"
+databaseURL: "https://dcbl-test.firebaseio.com"
+projectId: "dcbl-test"
+storageBucket: "dcbl-test.appspot.com"
+messagingSenderId: "129224597683"
+appId: "1:129224597683:web:61f5b19413bb0a0ff9d0c6"
+measurementId: "G-MCKH3HEWPW"
+rsvpIdURL: "https://us-central1-dcbl-test.cloudfunctions.net/authenticate?id="
+
 # Build settings
 #theme: minima
 #plugins:

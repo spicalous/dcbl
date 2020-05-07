@@ -1,13 +1,15 @@
+---
+---
 (function() {
   firebase.initializeApp({
-    apiKey: 'AIzaSyBHXUu-oaBHd94QDzNgHWtP8KfEnGUhkEY',
-    authDomain: 'dcbl-test.firebaseapp.com',
-    databaseURL: 'https://dcbl-test.firebaseio.com',
-    projectId: 'dcbl-test',
-    storageBucket: 'dcbl-test.appspot.com',
-    messagingSenderId: '129224597683',
-    appId: '1:129224597683:web:61f5b19413bb0a0ff9d0c6',
-    measurementId: 'G-MCKH3HEWPW'
+    apiKey: '{{ site.apiKey }}',
+    authDomain: '{{ site.authDomain }}',
+    databaseURL: '{{ site.databaseURL }}',
+    projectId: '{{ site.projectId }}',
+    storageBucket: '{{ site.storageBucket }}',
+    messagingSenderId: '{{ site.messagingSenderId }}',
+    appId: '{{ site.appId }}',
+    measurementId: '{{ site.measurementId }}'
   });
 
   function validateRSVPId(id) {
@@ -65,7 +67,7 @@
       setBtnLoading(true);
 
       var settings = { dataType: 'json', timeout: 8888 };
-      $.ajax('https://us-central1-dcbl-test.cloudfunctions.net/authenticate?id=' + id, settings)
+      $.ajax('{{ site.rsvpIdURL }}' + id, settings)
         .done(function(data) {
           if (!(data && data.token)) {
             handleError('Error 1');
