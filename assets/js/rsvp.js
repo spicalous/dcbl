@@ -1,13 +1,13 @@
 (function() {
   firebase.initializeApp({
-    apiKey: "AIzaSyBHXUu-oaBHd94QDzNgHWtP8KfEnGUhkEY",
-    authDomain: "dcbl-test.firebaseapp.com",
-    databaseURL: "https://dcbl-test.firebaseio.com",
-    projectId: "dcbl-test",
-    storageBucket: "dcbl-test.appspot.com",
-    messagingSenderId: "129224597683",
-    appId: "1:129224597683:web:61f5b19413bb0a0ff9d0c6",
-    measurementId: "G-MCKH3HEWPW"
+    apiKey: 'AIzaSyBHXUu-oaBHd94QDzNgHWtP8KfEnGUhkEY',
+    authDomain: 'dcbl-test.firebaseapp.com',
+    databaseURL: 'https://dcbl-test.firebaseio.com',
+    projectId: 'dcbl-test',
+    storageBucket: 'dcbl-test.appspot.com',
+    messagingSenderId: '129224597683',
+    appId: '1:129224597683:web:61f5b19413bb0a0ff9d0c6',
+    measurementId: 'G-MCKH3HEWPW'
   });
 
   function validateRSVPId(id) {
@@ -44,15 +44,17 @@
       alert(message + PLEASE_CONTACT);
     }
 
-    function handleSuccess(token, data) {
+    function handleSuccess(id, token) {
       setBtnLoading(false);
-      window.localStorage.setItem('fbtoken', token);
+      window.localStorage.setItem('rsvpId', id);
+      window.localStorage.setItem('token', token);
       window.location.href = '/rsvp-form';
     }
 
     btnSubmit.click(function() {
       var id = inputRSVPId.val();
-      $('form').addClass('was-validated');
+      var form = $('form');
+      form.addClass('was-validated');
 
       var invalidReason = validateRSVPId(id);
       if (invalidReason) {
@@ -61,7 +63,7 @@
       }
 
       id = id.toUpperCase();
-      $('form').removeClass('was-validated');
+      form.removeClass('was-validated');
       setBtnLoading(true);
 
       var settings = { dataType: 'json', timeout: 8888 };
@@ -72,15 +74,15 @@
             return;
           }
           firebase.auth().signInWithCustomToken(data.token)
-            .then(function(fbData) {
-              handleSuccess(data.token, fbData);
+            .then(function() {
+              handleSuccess(id, data.token);
             })
             .catch(function(error) {
               handleError('Error: Failed to authenticate RSVP ID, errorCode:' + error.code + ', errorMessage:' + error.message);
             });
         })
         .fail(function(jqXHR) {
-          var msg = 'Error: Failed to verify RSVP ID'
+          var msg = 'Error: Failed to verify RSVP ID';
           handleError(jqXHR.responseJSON && jqXHR.responseJSON.errorMessage
             ? jqXHR.responseJSON.errorMessage
             : msg);

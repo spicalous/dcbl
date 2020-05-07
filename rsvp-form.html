@@ -6,19 +6,51 @@ title: RSVP | DCBL Wedding
   <div class="row">
     <div class="col">
       <form>
-        {% include single-rsvp.html name="Ben Lertlumprasertkul" index=1 %}
-        {% include single-rsvp.html name="Daphne Cheung" index=2 %}
-        <div class="form-group">
-          <label for="exampleFormControlSelect2">Number of children under 12</label>
-          <select class="form-control" id="exampleFormControlSelect2">
-            <option>0</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <template id="single-rsvp">
+          <h4>%name%</h4>
+          <fieldset class="form-group ml-5">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="person-%index%-attendance" id="person-%index%-accept" value="accept" required>
+              <label class="form-check-label" for="person-%index%-accept">Joyfully accepts</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="person-%index%-attendance" id="person-%index%-decline" value="decline" required>
+              <label class="form-check-label" for="person-%index%-decline">Regretfully declines</label>
+            </div>
+          </fieldset>
+          <fieldset class="form-group ml-5">
+            <legend class="col-form-label pt-0">Food choice</legend>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="person-%index%-food" id="person-%index%-lamb" value="lamb" required>
+              <label class="form-check-label" for="person-%index%-lamb">Lamb</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="person-%index%-food" id="person-%index%-fish" value="fish" required>
+              <label class="form-check-label" for="person-%index%-fish">Fish</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="person-%index%-food" id="person-%index%-veg" value="veg" required>
+              <label class="form-check-label" for="person-%index%-veg">Vegetarian</label>
+            </div>
+          </fieldset>
+          <fieldset class="form-group ml-5 mb-5">
+            <label for="input-dietary-requirements">Dietary requirements</label>
+            <textarea class="form-control" id="input-dietary-requirements" rows="2"></textarea>
+          </fieldset>
+        </template>
+        <template id="rsvp-detail">
+          <div class="form-group">
+            <label for="select-children">Number of children under 12</label>
+            <select class="form-control" id="select-children">
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </select>
+          </div>
+          <button id="btn-rsvp-response-submit" type="submit" class="btn btn-primary">Submit</button>
+        </template>
       </form>
     </div>
   </div>
