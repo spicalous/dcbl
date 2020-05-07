@@ -15,10 +15,10 @@
 
   function handleFBError(msg, error) {
     if (error.code) {
-      msg + ', errorCode: ' + error.code;
+      msg = msg + ', errorCode: ' + error.code;
     }
     if (error.message) {
-      msg + ', errorMessage: ' + error.message;
+      msg = msg + ', errorMessage: ' + error.message;
     }
     handleError(msg);
   }
@@ -43,120 +43,124 @@
     measurementId: '{{ site.measurementId }}'
   });
 
-  firebase.auth().signInWithCustomToken(token).catch(function(error) {
-    handleFBError('Error 3: Failed to authenticate RSVP ID', error);
-  });
+  firebase.auth().signInWithCustomToken(token)
+    .then(function() {
 
-  var db = firebase.firestore();
+    var db = firebase.firestore();
 
-  db.collection('guests').doc(rsvpId)
-    .get()
-    .then(function(doc) {
-      if (!doc.exists) {
-        handleError('Error 4: Guest document data does not exist');
-      }
-
-      var form = $('form');
-      var singleTemplate = $('#single-rsvp');
-      var detailTemplate = $('#rsvp-detail');
-      var names = doc.data().names;
-      var guestToFieldMap = {};
-
-      names.forEach(function(name, index) {
-        form.append(singleTemplate.html().replace(/%name%/g, name).replace(/%index%/g, index));
-        var radioAccept = $('#person-' + index + '-accept');
-        var radioDecline = $('#person-' + index + '-decline');
-        var radioLamb = $('#person-' + index + '-lamb');
-        var radioFish = $('#person-' + index + '-fish');
-        var radioVeg = $('#person-' + index + '-veg');
-        var inputDietary = $('#person-' + index + '-dietary');
-
-        function handleAttendanceChanged() {
-          if (this.value == 'decline') {
-            radioLamb.prop('checked', false);
-            radioFish.prop('checked', false);
-            radioVeg.prop('checked', false);
-          }
-          radioLamb.prop('disabled', this.value == 'decline');
-          radioFish.prop('disabled', this.value == 'decline');
-          radioVeg.prop('disabled', this.value == 'decline');
-          inputDietary.prop('disabled', this.value == 'decline');
+    db.collection('guests').doc(rsvpId)
+      .get()
+      .then(function(doc) {
+        if (!doc.exists) {
+          handleError('Error 4: Guest document data does not exist');
         }
 
-        radioAccept.change(handleAttendanceChanged);
-        radioDecline.change(handleAttendanceChanged);
+        var form = $('form');
+        var singleTemplate = $('#single-rsvp');
+        var detailTemplate = $('#rsvp-detail');
+        var names = doc.data().names;
+        var guestToFieldMap = {};
 
-        guestToFieldMap[name] = {
-          radioAccept: radioAccept,
-          radioDecline: radioDecline,
-          radioLamb: radioLamb,
-          radioFish: radioFish,
-          radioVeg: radioVeg,
-          inputDietary: inputDietary
-        };
-      });
+        names.forEach(function(name, index) {
+          form.append(singleTemplate.html().replace(/%name%/g, name).replace(/%index%/g, index));
+          var radioAccept = $('#person-' + index + '-accept');
+          var radioDecline = $('#person-' + index + '-decline');
+          var radioLamb = $('#person-' + index + '-lamb');
+          var radioFish = $('#person-' + index + '-fish');
+          var radioVeg = $('#person-' + index + '-veg');
+          var inputDietary = $('#person-' + index + '-dietary');
 
-      form.append(detailTemplate.html());
-
-      var selectChildren = $('#select-children');
-      var response = {};
-
-      $('#btn-rsvp-response-submit').click(function() {
-        form.addClass('was-validated');
-
-        for (var i = 0; i < names.length; i++) {
-          var name = names[i];
-          var accepted = guestToFieldMap[name].radioAccept.prop('checked');
-          var declined = guestToFieldMap[name].radioDecline.prop('checked');
-          var lamb = guestToFieldMap[name].radioLamb.prop('checked');
-          var fish = guestToFieldMap[name].radioFish.prop('checked');
-          var veg = guestToFieldMap[name].radioVeg.prop('checked');
-          var dietary = guestToFieldMap[name].inputDietary.val() || '';
-
-          var validAttendance = accepted || declined;
-          var validFood = declined || (accepted && (lamb || fish || veg));
-          var validDietary = dietary.length < 200;
-          if (!validAttendance || !validFood || !validDietary) {
-            return;
+          function handleAttendanceChanged() {
+            if (this.value == 'decline') {
+              radioLamb.prop('checked', false);
+              radioFish.prop('checked', false);
+              radioVeg.prop('checked', false);
+            }
+            radioLamb.prop('disabled', this.value == 'decline');
+            radioFish.prop('disabled', this.value == 'decline');
+            radioVeg.prop('disabled', this.value == 'decline');
+            inputDietary.prop('disabled', this.value == 'decline');
           }
 
-          var foodResponse;
-          if (accepted) {
-            foodResponse = lamb
-              ? 'lamb'
-              : fish
-                ? 'fish'
-                : 'veg';
-          } else {
-            foodResponse = '';
-          }
+          radioAccept.change(handleAttendanceChanged);
+          radioDecline.change(handleAttendanceChanged);
 
-          response[name] = {
-            accepted: !!accepted,
-            food: foodResponse,
-            dietary: dietary
+          guestToFieldMap[name] = {
+            radioAccept: radioAccept,
+            radioDecline: radioDecline,
+            radioLamb: radioLamb,
+            radioFish: radioFish,
+            radioVeg: radioVeg,
+            inputDietary: inputDietary
           };
-        }
+        });
 
-        db.collection('responses').doc(rsvpId)
-          .set({
-            response: response,
-            children: selectChildren.val() || '0',
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-          })
-          .then(function() {
-            console.log('Document successfully written!');
-          })
-          .catch(function(error) {
-            handleFBError('Error 6: Error writing document', error);
-          });
+        form.append(detailTemplate.html());
 
-        form.removeClass('was-validated');
+        var selectChildren = $('#select-children');
+        var response = {};
+
+        $('#btn-rsvp-response-submit').click(function() {
+          form.addClass('was-validated');
+
+          for (var i = 0; i < names.length; i++) {
+            var name = names[i];
+            var accepted = guestToFieldMap[name].radioAccept.prop('checked');
+            var declined = guestToFieldMap[name].radioDecline.prop('checked');
+            var lamb = guestToFieldMap[name].radioLamb.prop('checked');
+            var fish = guestToFieldMap[name].radioFish.prop('checked');
+            var veg = guestToFieldMap[name].radioVeg.prop('checked');
+            var dietary = guestToFieldMap[name].inputDietary.val() || '';
+
+            var validAttendance = accepted || declined;
+            var validFood = declined || (accepted && (lamb || fish || veg));
+            var validDietary = dietary.length < 200;
+            if (!validAttendance || !validFood || !validDietary) {
+              return;
+            }
+
+            var foodResponse;
+            if (accepted) {
+              foodResponse = lamb
+                ? 'lamb'
+                : fish
+                  ? 'fish'
+                  : 'veg';
+            } else {
+              foodResponse = '';
+            }
+
+            response[name] = {
+              accepted: !!accepted,
+              food: foodResponse,
+              dietary: dietary
+            };
+          }
+
+          db.collection('responses').doc(rsvpId)
+            .set({
+              response: response,
+              children: selectChildren.val() || '0',
+              timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(function() {
+              console.log('Document successfully written!');
+            })
+            .catch(function(error) {
+              handleFBError('Error 6: Error writing document', error);
+            });
+
+          form.removeClass('was-validated');
+        });
+
+      })
+      .catch(function(error) {
+        handleFBError('Error 5: Error getting documents', error);
       });
-
     })
     .catch(function(error) {
-      handleFBError('Error 5: Error getting documents', error);
+      handleFBError('Error 3: Failed to authenticate RSVP ID', error);
     });
+
 
 }());
