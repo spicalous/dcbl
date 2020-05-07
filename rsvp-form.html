@@ -8,32 +8,32 @@ title: RSVP | DCBL Wedding
       <form novalidate>
         <template id="single-rsvp">
           <h4>%name%</h4>
-          <fieldset class="form-group ml-5">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="person-%index%-attendance" id="person-%index%-accept" value="accept" required>
-              <label class="form-check-label" for="person-%index%-accept">Joyfully accepts</label>
+          <fieldset class="form-group">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input class="custom-control-input" type="radio" name="person-%index%-attendance" id="person-%index%-accept" value="accept" required>
+              <label class="custom-control-label" for="person-%index%-accept">Joyfully accepts</label>
             </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="person-%index%-attendance" id="person-%index%-decline" value="decline" required>
-              <label class="form-check-label" for="person-%index%-decline">Regretfully declines</label>
-            </div>
-          </fieldset>
-          <fieldset class="form-group ml-5">
-            <legend class="col-form-label pt-0">Food choice</legend>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="person-%index%-food" id="person-%index%-lamb" value="lamb" required>
-              <label class="form-check-label" for="person-%index%-lamb">Lamb</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="person-%index%-food" id="person-%index%-fish" value="fish" required>
-              <label class="form-check-label" for="person-%index%-fish">Fish</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="person-%index%-food" id="person-%index%-veg" value="veg" required>
-              <label class="form-check-label" for="person-%index%-veg">Vegetarian</label>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input class="custom-control-input" type="radio" name="person-%index%-attendance" id="person-%index%-decline" value="decline" required>
+              <label class="custom-control-label" for="person-%index%-decline">Regretfully declines</label>
             </div>
           </fieldset>
-          <fieldset class="form-group ml-5 mb-5">
+          <fieldset class="form-group">
+            <legend class="col-form-label pt-0">Menu choice</legend>
+            <div class="custom-control custom-radio">
+              <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-lamb" value="lamb" required>
+              <label class="custom-control-label" for="person-%index%-lamb">Lamb</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-fish" value="fish" required>
+              <label class="custom-control-label" for="person-%index%-fish">Fish</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-veg" value="veg" required>
+              <label class="custom-control-label" for="person-%index%-veg">Vegetarian</label>
+            </div>
+          </fieldset>
+          <fieldset class="form-group mb-5">
             <label for="person-%index%-dietary">Dietary requirements</label>
             <textarea class="form-control" id="person-%index%-dietary" rows="2"></textarea>
           </fieldset>
@@ -47,6 +47,7 @@ title: RSVP | DCBL Wedding
               <option>2</option>
               <option>3</option>
               <option>4</option>
+              <option>5</option>
             </select>
           </div>
           <button id="btn-rsvp-response-submit" type="button" class="btn btn-primary">Submit</button>
