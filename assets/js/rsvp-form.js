@@ -6,10 +6,21 @@
   }
 
   function handleError(message) {
-    alert(message);
     clearTokens();
+    alert('Something went wrong! ' + message + ', please contact DCBLwedding@hotmail.com');
     window.location.href = '/rsvp';
   }
+
+  function handleFBError(msg, error) {
+    if (error.code) {
+      msg + ', errorCode: ' + error.code;
+    }
+    if (error.message) {
+      msg + ', errorMessage: ' + error.message;
+    }
+    handleError(msg);
+  }
+
 
   var rsvpId = window.localStorage.getItem('rsvpId');
   var token = window.localStorage.getItem('token');
@@ -30,32 +41,33 @@
     measurementId: 'G-MCKH3HEWPW'
   });
 
-  firebase.auth().signInWithCustomToken(token)
-    .then(function() {
-      console.log('success!');
-    })
-    .catch(function(error) {
-      handleError('Error: Failed to authenticate RSVP ID, errorCode:' + error.code + ', errorMessage:' + error.message);
-    });
+  firebase.auth().signInWithCustomToken(token).catch(function(error) {
+    handleFBError('Error 3: Failed to authenticate RSVP ID', error);
+  });
 
   var db = firebase.firestore();
 
-  db.collection('guests').where('rsvpId', '==', rsvpId)
+  db.collection('guests').doc(rsvpId)
     .get()
-    .then(function(querySnapshot) {
+    .then(function(doc) {
+      if (!doc.exists) {
+        handleError('Error 4: Guest document data does not exist');
+      }
+
       var form = $('form');
       var singleTemplate = $('#single-rsvp');
       var detailTemplate = $('#rsvp-detail');
-      var count = 0;
+      var names = doc.data().names;
+      var guestToFieldMap = {};
 
-      querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        form.prepend(singleTemplate.html().replace(/%name%/g, doc.data().name).replace(/%index%/g, count));
-        var radioAccept = $('#person-' + count + '-accept');
-        var radioDecline = $('#person-' + count + '-decline');
-        var radioLamb = $('#person-' + count + '-lamb');
-        var radioFish = $('#person-' + count + '-fish');
-        var radioVeg = $('#person-' + count + '-veg');
+      names.forEach(function(name, index) {
+        form.append(singleTemplate.html().replace(/%name%/g, name).replace(/%index%/g, index));
+        var radioAccept = $('#person-' + index + '-accept');
+        var radioDecline = $('#person-' + index + '-decline');
+        var radioLamb = $('#person-' + index + '-lamb');
+        var radioFish = $('#person-' + index + '-fish');
+        var radioVeg = $('#person-' + index + '-veg');
+        var inputDietary = $('#person-' + index + '-dietary');
 
         function handleAttendanceChanged() {
           if (this.value == 'decline') {
@@ -66,38 +78,83 @@
           radioLamb.prop('disabled', this.value == 'decline');
           radioFish.prop('disabled', this.value == 'decline');
           radioVeg.prop('disabled', this.value == 'decline');
+          inputDietary.prop('disabled', this.value == 'decline');
         }
 
         radioAccept.change(handleAttendanceChanged);
         radioDecline.change(handleAttendanceChanged);
 
-        count++;
+        guestToFieldMap[name] = {
+          radioAccept: radioAccept,
+          radioDecline: radioDecline,
+          radioLamb: radioLamb,
+          radioFish: radioFish,
+          radioVeg: radioVeg,
+          inputDietary: inputDietary
+        };
       });
 
       form.append(detailTemplate.html());
+
+      var selectChildren = $('#select-children');
+      var response = {};
+
       $('#btn-rsvp-response-submit').click(function() {
         form.addClass('was-validated');
 
-        for (var i = 0; i < count; i++) {
-          var accepted = $('#person-' + i + '-accept').prop('checked');
-          var declined = $('#person-' + i + '-decline').prop('checked');
-          var lamb = $('#person-' + i + '-lamb').prop('checked');
-          var fish = $('#person-' + i + '-fish').prop('checked');
-          var veg = $('#person-' + i + '-veg').prop('checked');
+        for (var i = 0; i < names.length; i++) {
+          var name = names[i];
+          var accepted = guestToFieldMap[name].radioAccept.prop('checked');
+          var declined = guestToFieldMap[name].radioDecline.prop('checked');
+          var lamb = guestToFieldMap[name].radioLamb.prop('checked');
+          var fish = guestToFieldMap[name].radioFish.prop('checked');
+          var veg = guestToFieldMap[name].radioVeg.prop('checked');
+          var dietary = guestToFieldMap[name].inputDietary.val() || '';
+
           var validAttendance = accepted || declined;
           var validFood = declined || (accepted && (lamb || fish || veg));
-          if (!validAttendance || !validFood) {
+          var validDietary = dietary.length < 200;
+          if (!validAttendance || !validFood || !validDietary) {
             return;
           }
-        }
-        console.log('do something');
 
-        // form.removeClass('was-validated');
+          var foodResponse;
+          if (accepted) {
+            foodResponse = lamb
+              ? 'lamb'
+              : fish
+                ? 'fish'
+                : 'veg';
+          } else {
+            foodResponse = '';
+          }
+
+          response[name] = {
+            accepted: !!accepted,
+            food: foodResponse,
+            dietary: dietary
+          };
+        }
+
+        db.collection('responses').doc(rsvpId)
+          .set({
+            response: response,
+            children: selectChildren.val() || '0',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          })
+          .then(function() {
+            console.log('Document successfully written!');
+          })
+          .catch(function(error) {
+            handleFBError('Error 6: Error writing document', error);
+          });
+
+        form.removeClass('was-validated');
       });
 
     })
     .catch(function(error) {
-      handleError('Error getting documents, errorCode:' + error.code + ', errorMessage:' + error.message);
+      handleFBError('Error 5: Error getting documents', error);
     });
 
 }());

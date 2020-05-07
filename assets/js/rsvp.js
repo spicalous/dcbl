@@ -24,7 +24,6 @@
   }
 
   window.onload = function() {
-    var PLEASE_CONTACT = ', please contact DCBLwedding@hotmail.com';
     var btnLoading = $('#btn-rsvp-submit-loading');
     var btnSubmit = $('#btn-rsvp-submit');
     var inputRSVPId = $('#input-rsvp-id');
@@ -41,7 +40,7 @@
 
     function handleError(message) {
       setBtnLoading(false);
-      alert(message + PLEASE_CONTACT);
+      alert('Something went wrong! ' + message + ', please contact DCBLwedding@hotmail.com');
     }
 
     function handleSuccess(id, token) {
@@ -52,7 +51,7 @@
     }
 
     btnSubmit.click(function() {
-      var id = inputRSVPId.val();
+      var id = (inputRSVPId.val() || '').toUpperCase();
       var form = $('form');
       form.addClass('was-validated');
 
@@ -62,7 +61,6 @@
         return;
       }
 
-      id = id.toUpperCase();
       form.removeClass('was-validated');
       setBtnLoading(true);
 
@@ -70,22 +68,17 @@
       $.ajax('https://us-central1-dcbl-test.cloudfunctions.net/authenticate?id=' + id, settings)
         .done(function(data) {
           if (!(data && data.token)) {
-            handleError('Error: Failed to check RSVP ID');
+            handleError('Error 1');
             return;
           }
-          firebase.auth().signInWithCustomToken(data.token)
-            .then(function() {
-              handleSuccess(id, data.token);
-            })
-            .catch(function(error) {
-              handleError('Error: Failed to authenticate RSVP ID, errorCode:' + error.code + ', errorMessage:' + error.message);
-            });
+          handleSuccess(id, data.token);
         })
         .fail(function(jqXHR) {
-          var msg = 'Error: Failed to verify RSVP ID';
-          handleError(jqXHR.responseJSON && jqXHR.responseJSON.errorMessage
-            ? jqXHR.responseJSON.errorMessage
-            : msg);
+          var msg = 'Error 2: Failed to find RSVP ID';
+          if (jqXHR.responseJSON && jqXHR.responseJSON.errorMessage) {
+            msg + ', errorMessage: ' + jqXHR.responseJSON.errorMessage;
+          }
+          handleError(msg);
         });
     });
   };

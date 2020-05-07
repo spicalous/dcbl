@@ -5,7 +5,7 @@ title: RSVP | DCBL Wedding
 <div class="container">
   <div class="row">
     <div class="col">
-      <form>
+      <form novalidate>
         <template id="single-rsvp">
           <h4>%name%</h4>
           <fieldset class="form-group ml-5">
@@ -34,8 +34,8 @@ title: RSVP | DCBL Wedding
             </div>
           </fieldset>
           <fieldset class="form-group ml-5 mb-5">
-            <label for="input-dietary-requirements">Dietary requirements</label>
-            <textarea class="form-control" id="input-dietary-requirements" rows="2"></textarea>
+            <label for="person-%index%-dietary">Dietary requirements</label>
+            <textarea class="form-control" id="person-%index%-dietary" rows="2"></textarea>
           </fieldset>
         </template>
         <template id="rsvp-detail">
@@ -49,7 +49,7 @@ title: RSVP | DCBL Wedding
               <option>4</option>
             </select>
           </div>
-          <button id="btn-rsvp-response-submit" type="submit" class="btn btn-primary">Submit</button>
+          <button id="btn-rsvp-response-submit" type="button" class="btn btn-primary">Submit</button>
         </template>
       </form>
     </div>
