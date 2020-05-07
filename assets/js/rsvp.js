@@ -19,8 +19,8 @@
     if (5 < id.length || id.length < 5) {
       return 'RSVP ID must be 5 characters';
     }
-    if (!id.match(/[A-Za-z]{5}/)) {
-      return 'RSVP ID must only contain letters';
+    if (!id.match(/[A-Za-z0-9]{5}/)) {
+      return 'RSVP ID must only contain numbers and letters';
     }
     return '';
   }

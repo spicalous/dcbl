@@ -114,7 +114,7 @@
 
             var validAttendance = accepted || declined;
             var validFood = declined || (accepted && (lamb || fish || veg));
-            var validDietary = dietary.length < 200;
+            var validDietary = dietary.length <= 200;
             if (!validAttendance || !validFood || !validDietary) {
               return;
             }
