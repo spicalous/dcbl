@@ -17,13 +17,14 @@ title: RSVP | DCBL Wedding
         <template id="single-rsvp">
           <h4>%name%</h4>
           <fieldset class="form-group">
-            <div class="custom-control custom-radio custom-control-inline">
+            <div class="custom-control custom-radio">
               <input class="custom-control-input" type="radio" name="person-%index%-attendance" id="person-%index%-accept" value="accept" required>
               <label class="custom-control-label" for="person-%index%-accept">Joyfully accepts</label>
             </div>
-            <div class="custom-control custom-radio custom-control-inline">
+            <div class="custom-control custom-radio">
               <input class="custom-control-input" type="radio" name="person-%index%-attendance" id="person-%index%-decline" value="decline" required>
               <label class="custom-control-label" for="person-%index%-decline">Regretfully declines</label>
+              <div id="person-%index%-attendance-feedback" class="invalid-feedback font-weight-bold"></div>
             </div>
           </fieldset>
           <fieldset class="form-group">
@@ -39,11 +40,13 @@ title: RSVP | DCBL Wedding
             <div class="custom-control custom-radio">
               <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-veg" value="veg" required>
               <label class="custom-control-label" for="person-%index%-veg">Vegetarian</label>
+              <div id="person-%index%-food-feedback" class="invalid-feedback font-weight-bold"></div>
             </div>
           </fieldset>
           <fieldset class="form-group mb-5">
             <label for="person-%index%-dietary">Dietary requirements</label>
             <textarea class="form-control" id="person-%index%-dietary" rows="2" maxlength="200"></textarea>
+            <div id="person-%index%-dietary-feedback" class="invalid-feedback font-weight-bold"></div>
           </fieldset>
         </template>
         <template id="rsvp-detail">

@@ -69,6 +69,9 @@
             var radioFish = $('#person-' + index + '-fish');
             var radioVeg = $('#person-' + index + '-veg');
             var inputDietary = $('#person-' + index + '-dietary');
+            var invalidAttendanceFeedback = $('#person-' + index + '-attendance-feedback');
+            var invalidFoodFeedback = $('#person-' + index + '-food-feedback');
+            var invalidDietaryFeedback = $('#person-' + index + '-dietary-feedback');
 
             function handleAttendanceChanged() {
               if (this.value == 'decline') {
@@ -91,7 +94,10 @@
               radioLamb: radioLamb,
               radioFish: radioFish,
               radioVeg: radioVeg,
-              inputDietary: inputDietary
+              inputDietary: inputDietary,
+              invalidAttendanceFeedback: invalidAttendanceFeedback,
+              invalidFoodFeedback: invalidFoodFeedback,
+              invalidDietaryFeedback: invalidDietaryFeedback
             };
           });
 
@@ -103,6 +109,8 @@
           $('#btn-rsvp-response-submit').click(function() {
             form.addClass('was-validated');
 
+            var isInvalid = false;
+
             for (var i = 0; i < names.length; i++) {
               var name = names[i];
               var accepted = guestToFieldMap[name].radioAccept.prop('checked');
@@ -111,12 +119,25 @@
               var fish = guestToFieldMap[name].radioFish.prop('checked');
               var veg = guestToFieldMap[name].radioVeg.prop('checked');
               var dietary = guestToFieldMap[name].inputDietary.val() || '';
+              var attendanceFeedback = guestToFieldMap[name].invalidAttendanceFeedback;
+              var foodFeedback = guestToFieldMap[name].invalidFoodFeedback;
+              var dietaryFeedback = guestToFieldMap[name].invalidDietaryFeedback;
 
               var validAttendance = accepted || declined;
               var validFood = declined || (accepted && (lamb || fish || veg));
               var validDietary = dietary.length <= 200;
-              if (!validAttendance || !validFood || !validDietary) {
-                return;
+
+              if (!validAttendance) {
+                attendanceFeedback.text('Please select an option');
+                isInvalid = true;
+              }
+              if (!validFood) {
+                foodFeedback.text('Please select an option');
+                isInvalid = true;
+              }
+              if (!validDietary) {
+                dietaryFeedback.text('Must be less than 200 characters');
+                isInvalid = true;
               }
 
               var foodResponse;
@@ -135,6 +156,10 @@
                 food: foodResponse,
                 dietary: dietary
               };
+            }
+
+            if (isInvalid) {
+              return;
             }
 
             db.collection('responses').doc(rsvpId)
