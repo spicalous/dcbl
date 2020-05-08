@@ -20,3 +20,23 @@
   background-repeat: no-repeat;
   background-position-x: center;
 }
+
+.was-validated .radio-border .custom-control-input:valid ~ .custom-control-label,
+.was-validated .radio-border .custom-control-input:invalid ~ .custom-control-label {
+  color: #212529;
+}
+
+.radio-border {
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  padding: 8px;
+  margin-bottom: 4px;
+
+  &.is-valid {
+    border: 1px solid #28a745;
+  }
+
+  &.is-invalid {
+    border: 1px solid #dc3545;
+  }
+}

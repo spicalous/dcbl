@@ -60,6 +60,7 @@
           var detailTemplate = $('#rsvp-detail');
           var names = doc.data().names;
           var guestToFieldMap = {};
+          var wasValidated = false;
 
           names.forEach(function(name, index) {
             form.append(singleTemplate.html().replace(/%name%/g, name).replace(/%index%/g, index));
@@ -85,8 +86,25 @@
               inputDietary.prop('disabled', this.value == 'decline');
             }
 
+            function handleParentClicked(jqEle) {
+              return function() {
+                if (!jqEle.prop('disabled')) {
+                  jqEle.prop('checked', true);
+                  jqEle.trigger('change');
+                  if (wasValidated) {
+                    validateAndSubmit(false);
+                  }
+                }
+              };
+            }
+
             radioAccept.change(handleAttendanceChanged);
             radioDecline.change(handleAttendanceChanged);
+            radioAccept.parent().parent().click(handleParentClicked(radioAccept));
+            radioDecline.parent().parent().click(handleParentClicked(radioDecline));
+            radioLamb.parent().parent().click(handleParentClicked(radioLamb));
+            radioFish.parent().parent().click(handleParentClicked(radioFish));
+            radioVeg.parent().parent().click(handleParentClicked(radioVeg));
 
             guestToFieldMap[name] = {
               radioAccept: radioAccept,
@@ -118,8 +136,9 @@
             }
           }
 
-          btnSubmitResponse.click(function() {
+          function validateAndSubmit(submit) {
             form.addClass('was-validated');
+            wasValidated = true;
 
             var isInvalid = false;
             var anyAccepted = false;
@@ -142,15 +161,36 @@
 
               if (!validAttendance) {
                 attendanceFeedback.text('Please select an option');
+                attendanceFeedback.addClass('d-block');
+                attendanceFeedback.parent().children('.radio-border').removeClass('is-valid');
+                attendanceFeedback.parent().children('.radio-border').addClass('is-invalid');
                 isInvalid = true;
+              } else {
+                attendanceFeedback.removeClass('d-block');
+                attendanceFeedback.parent().children('.radio-border').removeClass('is-invalid');
+                attendanceFeedback.parent().children('.radio-border').addClass('is-valid');
               }
               if (!validFood) {
                 foodFeedback.text('Please select an option');
+                foodFeedback.addClass('d-block');
+                foodFeedback.parent().children('.radio-border').removeClass('is-valid');
+                foodFeedback.parent().children('.radio-border').addClass('is-invalid');
                 isInvalid = true;
+              } else {
+                foodFeedback.removeClass('d-block');
+                foodFeedback.parent().children('.radio-border').removeClass('is-invalid');
+                if (declined) {
+                  foodFeedback.parent().children('.radio-border').removeClass('is-valid');
+                } else {
+                  foodFeedback.parent().children('.radio-border').addClass('is-valid');
+                }
               }
               if (!validDietary) {
                 dietaryFeedback.text('Must be less than 200 characters');
+                dietaryFeedback.addClass('d-block');
                 isInvalid = true;
+              } else {
+                dietaryFeedback.removeClass('d-block');
               }
 
               var foodResponse;
@@ -172,11 +212,12 @@
               };
             }
 
-            if (isInvalid) {
+            if (isInvalid || !submit) {
               return;
             }
 
             form.removeClass('was-validated');
+            wasValidated = false;
             setBtnLoading(true);
 
             db.collection('responses').doc(rsvpId)
@@ -199,6 +240,10 @@
                 setBtnLoading(false);
                 handleFBError('Error 6: Error writing document', error);
               });
+          }
+
+          btnSubmitResponse.click(function() {
+            validateAndSubmit(true);
           });
         })
         .catch(function(error) {
