@@ -31,7 +31,7 @@ storageBucket: "dcbl-test.appspot.com"
 messagingSenderId: "129224597683"
 appId: "1:129224597683:web:61f5b19413bb0a0ff9d0c6"
 measurementId: "G-MCKH3HEWPW"
-rsvpIdURL: "https://us-central1-dcbl-test.cloudfunctions.net/authenticate?id="
+rsvpIdURL: "https://europe-west2-dcbl-test.cloudfunctions.net/authenticate?id="
 
 # Build settings
 #theme: minima
