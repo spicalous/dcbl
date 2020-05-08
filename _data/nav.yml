@@ -7,7 +7,7 @@ items:
     url: /rsvp
   - title: SCHEDULE
     url: /schedule
-  - title: INFO
-    url: /info
   - title: REGISTRY
     url: /registry
+  - title: INFO
+    url: /info
