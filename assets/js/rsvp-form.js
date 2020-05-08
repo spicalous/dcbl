@@ -39,8 +39,7 @@
     projectId: '{{ site.projectId }}',
     storageBucket: '{{ site.storageBucket }}',
     messagingSenderId: '{{ site.messagingSenderId }}',
-    appId: '{{ site.appId }}',
-    measurementId: '{{ site.measurementId }}'
+    appId: '{{ site.appId }}'
   });
 
   firebase.auth().signInWithCustomToken(token)

@@ -1,16 +1,6 @@
 ---
 ---
 (function() {
-  firebase.initializeApp({
-    apiKey: '{{ site.apiKey }}',
-    authDomain: '{{ site.authDomain }}',
-    databaseURL: '{{ site.databaseURL }}',
-    projectId: '{{ site.projectId }}',
-    storageBucket: '{{ site.storageBucket }}',
-    messagingSenderId: '{{ site.messagingSenderId }}',
-    appId: '{{ site.appId }}',
-    measurementId: '{{ site.measurementId }}'
-  });
 
   function validateRSVPId(id) {
     if (!id) {
