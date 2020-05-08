@@ -171,10 +171,12 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
               })
               .then(function() {
-                console.log('Document successfully written!');
                 $('#modal .modal-body').text(anyAccepted
-                  ? 'Thank you for letting us know, we can\'t wait to celebrate with you!'
-                  : 'Thank you for letting us know, we\'re sorry that you won\'t be coming.');
+                  ? 'Thanks for letting us know, we can\'t wait to celebrate with you! 🥳'
+                  : 'Thanks for letting us know, we\'re sorry that you won\'t be coming.');
+                $('#modal').on('hide.bs.modal', function() {
+                  window.location.href = '/';
+                });
                 $('#modal').modal('show');
               })
               .catch(function(error) {
