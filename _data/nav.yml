@@ -1,10 +1,12 @@
-items:
+left-items:
   - title: HOME
     url: /
   - title: VENUE
     url: /venue
   - title: RSVP
     url: /rsvp
+
+right-items:
   - title: SCHEDULE
     url: /schedule
   - title: REGISTRY
