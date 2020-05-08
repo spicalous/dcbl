@@ -3,13 +3,13 @@ left-items:
     url: /
   - title: VENUE
     url: /venue
-  - title: RSVP
-    url: /rsvp
-
-right-items:
   - title: SCHEDULE
     url: /schedule
+
+right-items:
   - title: REGISTRY
     url: /registry
+  - title: RSVP
+    url: /rsvp
   - title: INFO
     url: /info
