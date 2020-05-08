@@ -16,10 +16,10 @@
     if (!id) {
       return 'Please input an id';
     }
-    if (5 < id.length || id.length < 5) {
-      return 'RSVP ID must be 5 characters';
+    if (6 < id.length || id.length < 6) {
+      return 'RSVP ID must be 6 characters';
     }
-    if (!id.match(/[A-Za-z0-9]{5}/)) {
+    if (!id.match(/[A-Za-z0-9]{6}/)) {
       return 'RSVP ID must only contain numbers and letters';
     }
     return '';
