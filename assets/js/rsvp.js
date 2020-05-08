@@ -29,6 +29,7 @@
     var btnLoading = $('#btn-rsvp-submit-loading');
     var btnSubmit = $('#btn-rsvp-submit');
     var inputRSVPId = $('#input-rsvp-id');
+    var form = $('form');
 
     function setBtnLoading(value) {
       if (value) {
@@ -52,9 +53,9 @@
       window.location.href = '/rsvp-form';
     }
 
-    btnSubmit.click(function() {
+    function handleSubmit(event) {
+      event.preventDefault();
       var id = (inputRSVPId.val() || '').toUpperCase();
-      var form = $('form');
       form.addClass('was-validated');
 
       var invalidReason = validateRSVPId(id);
@@ -82,7 +83,10 @@
           }
           handleError(msg);
         });
-    });
+    }
+
+    form.on('submit', handleSubmit);
+    btnSubmit.click(handleSubmit);
   };
 
 }());
