@@ -104,9 +104,21 @@
           form.append(detailTemplate.html());
 
           var selectChildren = $('#select-children');
+          var btnSubmitResponse = $('#btn-rsvp-response-submit');
+          var btnSubmitResponseLoading = $('#btn-rsvp-response-submit-loading');
           var response = {};
 
-          $('#btn-rsvp-response-submit').click(function() {
+          function setBtnLoading(value) {
+            if (value) {
+              btnSubmitResponse.addClass('d-none');
+              btnSubmitResponseLoading.removeClass('d-none');
+            } else {
+              btnSubmitResponseLoading.addClass('d-none');
+              btnSubmitResponse.removeClass('d-none');
+            }
+          }
+
+          btnSubmitResponse.click(function() {
             form.addClass('was-validated');
 
             var isInvalid = false;
@@ -164,6 +176,9 @@
               return;
             }
 
+            form.removeClass('was-validated');
+            setBtnLoading(true);
+
             db.collection('responses').doc(rsvpId)
               .set({
                 response: response,
@@ -171,6 +186,7 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
               })
               .then(function() {
+                setBtnLoading(false);
                 $('#modal .modal-body').text(anyAccepted
                   ? 'Thanks for letting us know, we can\'t wait to celebrate with you! 🥳'
                   : 'Thanks for letting us know, we\'re sorry that you won\'t be coming.');
@@ -180,12 +196,10 @@
                 $('#modal').modal('show');
               })
               .catch(function(error) {
+                setBtnLoading(false);
                 handleFBError('Error 6: Error writing document', error);
               });
-
-            form.removeClass('was-validated');
           });
-
         })
         .catch(function(error) {
           handleFBError('Error 5: Error getting documents', error);

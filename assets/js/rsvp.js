@@ -33,8 +33,8 @@
 
     function setBtnLoading(value) {
       if (value) {
-        btnLoading.removeClass('d-none');
         btnSubmit.addClass('d-none');
+        btnLoading.removeClass('d-none');
       } else {
         btnLoading.addClass('d-none');
         btnSubmit.removeClass('d-none');
