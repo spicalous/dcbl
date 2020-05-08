@@ -110,6 +110,7 @@
             form.addClass('was-validated');
 
             var isInvalid = false;
+            var anyAccepted = false;
 
             for (var i = 0; i < names.length; i++) {
               var name = names[i];
@@ -142,6 +143,7 @@
 
               var foodResponse;
               if (accepted) {
+                anyAccepted = true;
                 foodResponse = lamb
                   ? 'lamb'
                   : fish
@@ -170,6 +172,10 @@
               })
               .then(function() {
                 console.log('Document successfully written!');
+                $('#modal .modal-body').text(anyAccepted
+                  ? 'Thank you for letting us know, we can\'t wait to celebrate with you!'
+                  : 'Thank you for letting us know, we\'re sorry that you won\'t be coming.');
+                $('#modal').modal('show');
               })
               .catch(function(error) {
                 handleFBError('Error 6: Error writing document', error);
