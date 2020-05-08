@@ -1,3 +1,16 @@
+@font-face {
+  font-family: MattAntique;
+  src: url(/assets/fonts/MattAntique.ttf);
+}
+
+.matt-antique {
+  font-family: MattAntique;
+}
+
+.flex-even {
+  flex: 1;
+}
+
 .navy-text {
   color: #000080;
 }
