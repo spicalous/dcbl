@@ -3,76 +3,70 @@ layout: base
 title: INFO | DCBL Wedding
 bridesmaids:
   -
-    name: Kerry Liu
+    name: Kerry
     portraitURL: /assets/images/portrait-kerry.jpg
   -
-    name: Catrina Tsang
+    name: Catrina
     portraitURL: /assets/images/portrait-catrina.jpg
   -
-    name: Kirsty Liu
+    name: Kirsty
     portraitURL: /assets/images/portrait-kirsty.jpg
   -
-    name: Holly Chung
+    name: Holly
     portraitURL: /assets/images/portrait-holly.jpg
 groomsmen:
   -
-    name: Thunder Rice
-    portraitURL: https://via.placeholder.com/350
+    name: Thunder
+    portraitURL: /assets/images/portrait-thunder.jpg
   -
-    name: Shaheer Baig
-    portraitURL: https://via.placeholder.com/350
+    name: Shaheer
+    portraitURL: /assets/images/portrait-shaheer.jpg
   -
-    name: Michael Leong
-    portraitURL: https://via.placeholder.com/350
+    name: Michael
+    portraitURL: /assets/images/portrait-michael.jpg
   -
-    name: Yaseen Gani
-    portraitURL: https://via.placeholder.com/350
+    name: Yaseen
+    portraitURL: /assets/images/portrait-yaseen.jpg
 ---
-<div class="container matt-antique">
+<div class="container matt-antique text-center">
   <h1>Parking</h1>
   <div class="row my-5">
     <div class="col text-center">
       Parking
     </div>
   </div>
+  <div class="divider mb-5 mx-auto"></div>
   <h1>Accomodation</h1>
-  <div class="row my-5">
-    <div class="col text-center">
-      Accomodation
-    </div>
-  </div>
-  <h2>Onsite</h2>
+  <h3>Onsite</h3>
   <div class="row my-5">
     <div class="col text-center">
       Onsite
     </div>
   </div>
-  <h2>Nearby</h2>
-  <div class="row my-5">
+  <h3>Nearby</h3>
+  <div class="row my-5 ">
     <div class="col text-center">
       Nearby
     </div>
   </div>
-  <h1>Bridesmaids</h1>
-  <div class="row my-5">
+  <div class="divider mb-5 mx-auto"></div>
+  <h1>The Team</h1>
+  <div class="lead">If you need anything on the day,</div>
+  <div class="lead mb-5">these are the people to look out for!</div>
+  <h3>Bridesmaids</h3>
+  <div class="row mt-3 mb-5">
     {% for bridesmaid in page.bridesmaids %}
     <div class="col-8 mx-auto col-sm-6 col-md-3 text-center mb-3">
       {% include portrait.html src=bridesmaid.portraitURL name=bridesmaid.name %}
     </div>
     {% endfor %}
   </div>
-  <h1>Groomsmen</h1>
-  <div class="row my-5">
+  <h3>Groomsmen</h3>
+  <div class="row mt-3 mb-5">
     {% for groomsman in page.groomsmen %}
     <div class="col-8 mx-auto col-sm-6 col-md-3 text-center mb-3">
       {% include portrait.html src=groomsman.portraitURL name=groomsman.name %}
     </div>
     {% endfor %}
-  </div>
-  <h1>Dresscode</h1>
-  <div class="row my-5">
-    <div class="col text-center">
-      Dresscode
-    </div>
   </div>
 </div>
