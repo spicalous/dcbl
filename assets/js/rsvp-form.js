@@ -139,8 +139,8 @@
             form.addClass('was-validated');
             wasValidated = true;
 
-            var isInvalid = false;
             var anyAccepted = false;
+            var firstInvalidJQEle = null;
 
             for (var i = 0; i < names.length; i++) {
               var name = names[i];
@@ -155,7 +155,7 @@
               var dietaryFeedback = guestToFieldMap[name].invalidDietaryFeedback;
 
               var validAttendance = accepted || declined;
-              var validFood = declined || (accepted && (lamb || fish || veg));
+              var validFood = declined || (lamb || fish || veg);
               var validDietary = dietary.length <= 200;
 
               if (!validAttendance) {
@@ -163,7 +163,7 @@
                 attendanceFeedback.addClass('d-block');
                 attendanceFeedback.parent().children('.radio-border').removeClass('is-valid');
                 attendanceFeedback.parent().children('.radio-border').addClass('is-invalid');
-                isInvalid = true;
+                firstInvalidJQEle = firstInvalidJQEle || guestToFieldMap[name].radioAccept;
               } else {
                 attendanceFeedback.removeClass('d-block');
                 attendanceFeedback.parent().children('.radio-border').removeClass('is-invalid');
@@ -174,7 +174,7 @@
                 foodFeedback.addClass('d-block');
                 foodFeedback.parent().children('.radio-border').removeClass('is-valid');
                 foodFeedback.parent().children('.radio-border').addClass('is-invalid');
-                isInvalid = true;
+                firstInvalidJQEle = firstInvalidJQEle || guestToFieldMap[name].radioLamb;
               } else {
                 foodFeedback.removeClass('d-block');
                 foodFeedback.parent().children('.radio-border').removeClass('is-invalid');
@@ -187,7 +187,7 @@
               if (!validDietary) {
                 dietaryFeedback.text('Must be less than 200 characters');
                 dietaryFeedback.addClass('d-block');
-                isInvalid = true;
+                firstInvalidJQEle = firstInvalidJQEle || guestToFieldMap[name].inputDietary;
               } else {
                 dietaryFeedback.removeClass('d-block');
               }
@@ -211,7 +211,13 @@
               };
             }
 
-            if (isInvalid || !submit) {
+            if (!submit) {
+              return;
+            }
+
+            // Only scroll if it's a submission
+            if (firstInvalidJQEle) {
+              $('html, body').animate({ scrollTop: firstInvalidJQEle.offset().top - 20 });
               return;
             }
 
