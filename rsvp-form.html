@@ -32,7 +32,7 @@ title: RSVP | DCBL Wedding
             <div id="person-%index%-attendance-feedback" class="invalid-feedback font-weight-bold"></div>
           </fieldset>
           <fieldset class="form-group">
-            <legend class="col-form-label pt-0">Menu choice</legend>
+            <legend class="col-form-label pt-0">Adult menu</legend>
             <div class="radio-border">
               <div class="custom-control custom-radio">
                 <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-lamb" value="lamb" required>
@@ -58,6 +58,39 @@ title: RSVP | DCBL Wedding
               </div>
             </div>
             <div id="person-%index%-food-feedback" class="invalid-feedback font-weight-bold"></div>
+            <legend class="col-form-label pt-3">For children under 12 only</legend>
+            <div class="radio-border">
+              <div class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-lamb-child" value="lamb" required>
+                <label class="custom-control-label" for="person-%index%-lamb-child">
+                  Children's portion of the lamb dish (meat)
+                </label>
+              </div>
+            </div>
+            <div class="radio-border">
+              <div class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-fish-child" value="fish" required>
+                <label class="custom-control-label" for="person-%index%-fish-child">
+                  Children's portion of the cod dish (fish)
+                </label>
+              </div>
+            </div>
+            <div class="radio-border">
+              <div class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-veg-child" value="veg" required>
+                <label class="custom-control-label" for="person-%index%-veg-child">
+                  Children's portion of the gnocci dish (veg)
+                </label>
+              </div>
+            </div>
+            <div class="radio-border">
+              <div class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-custom-child" value="veg" required>
+                <label class="custom-control-label" for="person-%index%-custom-child">
+                  Garlic bread (starter) and chicken nuggets and chips (main)
+                </label>
+              </div>
+            </div>
           </fieldset>
           <fieldset class="form-group mb-5">
             <label for="person-%index%-dietary">Dietary requirements</label>
@@ -66,17 +99,6 @@ title: RSVP | DCBL Wedding
           </fieldset>
         </template>
         <template id="rsvp-detail">
-          <div class="form-group">
-            <label for="select-children">Number of children under 12</label>
-            <select class="form-control" id="select-children">
-              <option>0</option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-          </div>
           <button id="btn-rsvp-response-submit" type="button" class="btn btn-primary">Submit</button>
           <button type="button" id="btn-rsvp-response-submit-loading" class="btn btn-primary d-none" disabled>
             Submitting

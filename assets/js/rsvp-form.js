@@ -68,6 +68,10 @@
             var radioLamb = $('#person-' + index + '-lamb');
             var radioFish = $('#person-' + index + '-fish');
             var radioVeg = $('#person-' + index + '-veg');
+            var radioLambChild = $('#person-' + index + '-lamb-child');
+            var radioFishChild = $('#person-' + index + '-fish-child');
+            var radioVegChild = $('#person-' + index + '-veg-child');
+            var radioCustomChild = $('#person-' + index + '-custom-child');
             var inputDietary = $('#person-' + index + '-dietary');
             var invalidAttendanceFeedback = $('#person-' + index + '-attendance-feedback');
             var invalidFoodFeedback = $('#person-' + index + '-food-feedback');
@@ -78,10 +82,18 @@
                 radioLamb.prop('checked', false);
                 radioFish.prop('checked', false);
                 radioVeg.prop('checked', false);
+                radioLambChild.prop('checked', false);
+                radioFishChild.prop('checked', false);
+                radioVegChild.prop('checked', false);
+                radioCustomChild.prop('checked', false);
               }
               radioLamb.prop('disabled', this.value == 'decline');
               radioFish.prop('disabled', this.value == 'decline');
               radioVeg.prop('disabled', this.value == 'decline');
+              radioLambChild.prop('disabled', this.value == 'decline');
+              radioFishChild.prop('disabled', this.value == 'decline');
+              radioVegChild.prop('disabled', this.value == 'decline');
+              radioCustomChild.prop('disabled', this.value == 'decline');
               inputDietary.prop('disabled', this.value == 'decline');
             }
 
@@ -104,6 +116,10 @@
             radioLamb.parent().parent().click(handleParentClicked(radioLamb));
             radioFish.parent().parent().click(handleParentClicked(radioFish));
             radioVeg.parent().parent().click(handleParentClicked(radioVeg));
+            radioLambChild.parent().parent().click(handleParentClicked(radioLambChild));
+            radioFishChild.parent().parent().click(handleParentClicked(radioFishChild));
+            radioVegChild.parent().parent().click(handleParentClicked(radioVegChild));
+            radioCustomChild.parent().parent().click(handleParentClicked(radioCustomChild));
 
             guestToFieldMap[name] = {
               radioAccept: radioAccept,
@@ -111,6 +127,10 @@
               radioLamb: radioLamb,
               radioFish: radioFish,
               radioVeg: radioVeg,
+              radioLambChild: radioLambChild,
+              radioFishChild: radioFishChild,
+              radioVegChild: radioVegChild,
+              radioCustomChild: radioCustomChild,
               inputDietary: inputDietary,
               invalidAttendanceFeedback: invalidAttendanceFeedback,
               invalidFoodFeedback: invalidFoodFeedback,
@@ -120,7 +140,6 @@
 
           form.append(detailTemplate.html());
 
-          var selectChildren = $('#select-children');
           var btnSubmitResponse = $('#btn-rsvp-response-submit');
           var btnSubmitResponseLoading = $('#btn-rsvp-response-submit-loading');
           var response = {};
@@ -149,13 +168,17 @@
               var lamb = guestToFieldMap[name].radioLamb.prop('checked');
               var fish = guestToFieldMap[name].radioFish.prop('checked');
               var veg = guestToFieldMap[name].radioVeg.prop('checked');
+              var lambChild = guestToFieldMap[name].radioLambChild.prop('checked');
+              var fishChild = guestToFieldMap[name].radioFishChild.prop('checked');
+              var vegChild = guestToFieldMap[name].radioVegChild.prop('checked');
+              var customChild = guestToFieldMap[name].radioCustomChild.prop('checked');
               var dietary = guestToFieldMap[name].inputDietary.val() || '';
               var attendanceFeedback = guestToFieldMap[name].invalidAttendanceFeedback;
               var foodFeedback = guestToFieldMap[name].invalidFoodFeedback;
               var dietaryFeedback = guestToFieldMap[name].invalidDietaryFeedback;
 
               var validAttendance = accepted || declined;
-              var validFood = declined || (lamb || fish || veg);
+              var validFood = declined || (lamb || fish || veg || lambChild || fishChild ||vegChild || customChild);
               var validDietary = dietary.length <= 200;
 
               if (!validAttendance) {
@@ -170,7 +193,7 @@
                 attendanceFeedback.parent().children('.radio-border').addClass('is-valid');
               }
               if (!validFood) {
-                foodFeedback.text('Please select an option');
+                foodFeedback.text('Please select an option above (or below for children under 12)');
                 foodFeedback.addClass('d-block');
                 foodFeedback.parent().children('.radio-border').removeClass('is-valid');
                 foodFeedback.parent().children('.radio-border').addClass('is-invalid');
@@ -199,7 +222,15 @@
                   ? 'lamb'
                   : fish
                     ? 'fish'
-                    : 'veg';
+                    : veg
+                      ? 'veg'
+                      : lambChild
+                        ? 'lambChild'
+                        : fishChild
+                          ? 'fishChild'
+                          : vegChild
+                            ? 'vegChild'
+                            : 'customChild';
               } else {
                 foodResponse = '';
               }
@@ -228,7 +259,6 @@
             db.collection('responses').doc(rsvpId)
               .set({
                 response: response,
-                children: selectChildren.val() || '0',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
               })
               .then(function() {
