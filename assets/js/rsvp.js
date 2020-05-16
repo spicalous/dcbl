@@ -33,7 +33,7 @@
 
     function handleError(message) {
       setBtnLoading(false);
-      alert('Something went wrong! ' + message + ', please contact DCBLwedding@hotmail.com');
+      alert('Something went wrong! ' + message + ', please contact dcblwedding@hotmail.com');
     }
 
     function handleSuccess(id, token) {
