@@ -45,6 +45,7 @@
   firebase.auth().signInWithCustomToken(token)
     .then(function() {
       $('#form-loading-spinner').remove();
+      $('#form-info').removeClass('d-none');
       var db = firebase.firestore();
 
       db.collection('guests').doc(rsvpId)
