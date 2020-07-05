@@ -13,7 +13,10 @@ title: RSVP | DCBL Wedding
   </div>
   <div id="form-info" class="row mb-5 d-none">
     <div class="col">
-      <p>For each guest, please select either joyfully accepts or regretfully declines. For those joyfully accepting, please then select a main course</p>
+      <p>
+        Your reply is kindly requested before 20<sup>th</sup> August 2020.<br>
+        Please note that the reception drinks and canapés begin at 13:45 and the wedding breakfast begins at 16:00 - <a href="{{ "/schedule" | relative_url }}">see the full schedule here</a>.
+      </p>
     </div>
   </div>
   <div class="row mb-5">
@@ -62,11 +65,19 @@ title: RSVP | DCBL Wedding
                 </label>
               </div>
             </div>
+            <div class="radio-border">
+              <div class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-none" value="none" required>
+                <label class="custom-control-label" for="person-%index%-none">
+                  I won't be attending the wedding breakfast (I will only be attending either the ceremony or evening party)
+                </label>
+              </div>
+            </div>
             <div id="person-%index%-food-feedback" class="invalid-feedback font-weight-bold"></div>
             <legend class="col-form-label pt-3">For children under 12 only</legend>
             <div class="radio-border">
               <div class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-lamb-child" value="lamb" required>
+                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-lamb-child" value="lamb-child" required>
                 <label class="custom-control-label" for="person-%index%-lamb-child">
                   Children's portion of the lamb dish (meat)
                 </label>
@@ -74,7 +85,7 @@ title: RSVP | DCBL Wedding
             </div>
             <div class="radio-border">
               <div class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-fish-child" value="fish" required>
+                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-fish-child" value="fish-child" required>
                 <label class="custom-control-label" for="person-%index%-fish-child">
                   Children's portion of the cod dish (fish)
                 </label>
@@ -82,7 +93,7 @@ title: RSVP | DCBL Wedding
             </div>
             <div class="radio-border">
               <div class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-veg-child" value="veg" required>
+                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-veg-child" value="veg-child" required>
                 <label class="custom-control-label" for="person-%index%-veg-child">
                   Children's portion of the gnocci dish (veg)
                 </label>
@@ -90,9 +101,17 @@ title: RSVP | DCBL Wedding
             </div>
             <div class="radio-border">
               <div class="custom-control custom-radio">
-                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-custom-child" value="veg" required>
+                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-custom-child" value="custom-child" required>
                 <label class="custom-control-label" for="person-%index%-custom-child">
                   Garlic bread (starter) and chicken nuggets and chips (main)
+                </label>
+              </div>
+            </div>
+            <div class="radio-border">
+              <div class="custom-control custom-radio">
+                <input class="custom-control-input" type="radio" name="person-%index%-food" id="person-%index%-none-child" value="none-child" required>
+                <label class="custom-control-label" for="person-%index%-none-child">
+                  I won't be attending the wedding breakfast (I will only be attending either the ceremony or evening party)
                 </label>
               </div>
             </div>

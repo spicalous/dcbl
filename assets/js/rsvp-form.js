@@ -69,10 +69,12 @@
             var radioLamb = $('#person-' + index + '-lamb');
             var radioFish = $('#person-' + index + '-fish');
             var radioVeg = $('#person-' + index + '-veg');
+            var radioNone = $('#person-' + index + '-none');
             var radioLambChild = $('#person-' + index + '-lamb-child');
             var radioFishChild = $('#person-' + index + '-fish-child');
             var radioVegChild = $('#person-' + index + '-veg-child');
             var radioCustomChild = $('#person-' + index + '-custom-child');
+            var radioNoneChild = $('#person-' + index + '-none-child');
             var inputDietary = $('#person-' + index + '-dietary');
             var invalidAttendanceFeedback = $('#person-' + index + '-attendance-feedback');
             var invalidFoodFeedback = $('#person-' + index + '-food-feedback');
@@ -83,18 +85,22 @@
                 radioLamb.prop('checked', false);
                 radioFish.prop('checked', false);
                 radioVeg.prop('checked', false);
+                radioNone.prop('checked', false);
                 radioLambChild.prop('checked', false);
                 radioFishChild.prop('checked', false);
                 radioVegChild.prop('checked', false);
                 radioCustomChild.prop('checked', false);
+                radioNoneChild.prop('checked', false);
               }
               radioLamb.prop('disabled', this.value == 'decline');
               radioFish.prop('disabled', this.value == 'decline');
               radioVeg.prop('disabled', this.value == 'decline');
+              radioNone.prop('disabled', this.value == 'decline');
               radioLambChild.prop('disabled', this.value == 'decline');
               radioFishChild.prop('disabled', this.value == 'decline');
               radioVegChild.prop('disabled', this.value == 'decline');
               radioCustomChild.prop('disabled', this.value == 'decline');
+              radioNoneChild.prop('disabled', this.value == 'decline');
               inputDietary.prop('disabled', this.value == 'decline');
             }
 
@@ -117,10 +123,12 @@
             radioLamb.parent().parent().click(handleParentClicked(radioLamb));
             radioFish.parent().parent().click(handleParentClicked(radioFish));
             radioVeg.parent().parent().click(handleParentClicked(radioVeg));
+            radioNone.parent().parent().click(handleParentClicked(radioNone));
             radioLambChild.parent().parent().click(handleParentClicked(radioLambChild));
             radioFishChild.parent().parent().click(handleParentClicked(radioFishChild));
             radioVegChild.parent().parent().click(handleParentClicked(radioVegChild));
             radioCustomChild.parent().parent().click(handleParentClicked(radioCustomChild));
+            radioNoneChild.parent().parent().click(handleParentClicked(radioNoneChild));
 
             guestToFieldMap[name] = {
               radioAccept: radioAccept,
@@ -128,10 +136,12 @@
               radioLamb: radioLamb,
               radioFish: radioFish,
               radioVeg: radioVeg,
+              radioNone: radioNone,
               radioLambChild: radioLambChild,
               radioFishChild: radioFishChild,
               radioVegChild: radioVegChild,
               radioCustomChild: radioCustomChild,
+              radioNoneChild: radioNoneChild,
               inputDietary: inputDietary,
               invalidAttendanceFeedback: invalidAttendanceFeedback,
               invalidFoodFeedback: invalidFoodFeedback,
@@ -169,17 +179,19 @@
               var lamb = guestToFieldMap[name].radioLamb.prop('checked');
               var fish = guestToFieldMap[name].radioFish.prop('checked');
               var veg = guestToFieldMap[name].radioVeg.prop('checked');
+              var none = guestToFieldMap[name].radioNone.prop('checked');
               var lambChild = guestToFieldMap[name].radioLambChild.prop('checked');
               var fishChild = guestToFieldMap[name].radioFishChild.prop('checked');
               var vegChild = guestToFieldMap[name].radioVegChild.prop('checked');
               var customChild = guestToFieldMap[name].radioCustomChild.prop('checked');
+              var noneChild = guestToFieldMap[name].radioNoneChild.prop('checked');
               var dietary = guestToFieldMap[name].inputDietary.val() || '';
               var attendanceFeedback = guestToFieldMap[name].invalidAttendanceFeedback;
               var foodFeedback = guestToFieldMap[name].invalidFoodFeedback;
               var dietaryFeedback = guestToFieldMap[name].invalidDietaryFeedback;
 
               var validAttendance = accepted || declined;
-              var validFood = declined || (lamb || fish || veg || lambChild || fishChild ||vegChild || customChild);
+              var validFood = declined || (lamb || fish || veg || none || lambChild || fishChild ||vegChild || customChild || noneChild);
               var validDietary = dietary.length <= 200;
 
               if (!validAttendance) {
@@ -225,13 +237,17 @@
                     ? 'fish'
                     : veg
                       ? 'veg'
-                      : lambChild
-                        ? 'lambChild'
-                        : fishChild
-                          ? 'fishChild'
-                          : vegChild
-                            ? 'vegChild'
-                            : 'customChild';
+                      : none
+                        ? 'none'
+                        : lambChild
+                          ? 'lambChild'
+                          : fishChild
+                            ? 'fishChild'
+                            : vegChild
+                              ? 'vegChild'
+                              : noneChild
+                                ? 'noneChild'
+                                : 'customChild';
               } else {
                 foodResponse = '';
               }
@@ -265,7 +281,7 @@
               .then(function() {
                 setBtnLoading(false);
                 $('#modal .modal-body').text(anyAccepted
-                  ? 'Thanks for letting us know, we can\'t wait to celebrate with you! 🥳'
+                  ? 'Thanks for letting us know, we can\'t wait to celebrate with you! 🎉'
                   : 'Thanks for letting us know, we\'re sorry that you won\'t be coming.');
                 $('#modal').on('hide.bs.modal', function() {
                   window.location.href = '/';
