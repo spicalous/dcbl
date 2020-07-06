@@ -65,43 +65,39 @@
           names.forEach(function(name, index) {
             form.append(singleTemplate.html().replace(/%name%/g, name).replace(/%index%/g, index));
             var radioAccept = $('#person-' + index + '-accept');
+            var radioAcceptPartial = $('#person-' + index + '-accept-partial');
             var radioDecline = $('#person-' + index + '-decline');
             var radioLamb = $('#person-' + index + '-lamb');
             var radioFish = $('#person-' + index + '-fish');
             var radioVeg = $('#person-' + index + '-veg');
-            var radioNone = $('#person-' + index + '-none');
             var radioLambChild = $('#person-' + index + '-lamb-child');
             var radioFishChild = $('#person-' + index + '-fish-child');
             var radioVegChild = $('#person-' + index + '-veg-child');
             var radioCustomChild = $('#person-' + index + '-custom-child');
-            var radioNoneChild = $('#person-' + index + '-none-child');
             var inputDietary = $('#person-' + index + '-dietary');
             var invalidAttendanceFeedback = $('#person-' + index + '-attendance-feedback');
             var invalidFoodFeedback = $('#person-' + index + '-food-feedback');
             var invalidDietaryFeedback = $('#person-' + index + '-dietary-feedback');
 
             function handleAttendanceChanged() {
-              if (this.value == 'decline') {
+              var shouldUncheckAndDisable = this.value == 'accept-partial' || this.value == 'decline';
+              if (shouldUncheckAndDisable) {
                 radioLamb.prop('checked', false);
                 radioFish.prop('checked', false);
                 radioVeg.prop('checked', false);
-                radioNone.prop('checked', false);
                 radioLambChild.prop('checked', false);
                 radioFishChild.prop('checked', false);
                 radioVegChild.prop('checked', false);
                 radioCustomChild.prop('checked', false);
-                radioNoneChild.prop('checked', false);
               }
-              radioLamb.prop('disabled', this.value == 'decline');
-              radioFish.prop('disabled', this.value == 'decline');
-              radioVeg.prop('disabled', this.value == 'decline');
-              radioNone.prop('disabled', this.value == 'decline');
-              radioLambChild.prop('disabled', this.value == 'decline');
-              radioFishChild.prop('disabled', this.value == 'decline');
-              radioVegChild.prop('disabled', this.value == 'decline');
-              radioCustomChild.prop('disabled', this.value == 'decline');
-              radioNoneChild.prop('disabled', this.value == 'decline');
-              inputDietary.prop('disabled', this.value == 'decline');
+              radioLamb.prop('disabled', shouldUncheckAndDisable);
+              radioFish.prop('disabled', shouldUncheckAndDisable);
+              radioVeg.prop('disabled', shouldUncheckAndDisable);
+              radioLambChild.prop('disabled', shouldUncheckAndDisable);
+              radioFishChild.prop('disabled', shouldUncheckAndDisable);
+              radioVegChild.prop('disabled', shouldUncheckAndDisable);
+              radioCustomChild.prop('disabled', shouldUncheckAndDisable);
+              inputDietary.prop('disabled', shouldUncheckAndDisable);
             }
 
             function handleParentClicked(jqEle) {
@@ -117,31 +113,30 @@
             }
 
             radioAccept.change(handleAttendanceChanged);
+            radioAcceptPartial.change(handleAttendanceChanged);
             radioDecline.change(handleAttendanceChanged);
             radioAccept.parent().parent().click(handleParentClicked(radioAccept));
+            radioAcceptPartial.parent().parent().click(handleParentClicked(radioAcceptPartial));
             radioDecline.parent().parent().click(handleParentClicked(radioDecline));
             radioLamb.parent().parent().click(handleParentClicked(radioLamb));
             radioFish.parent().parent().click(handleParentClicked(radioFish));
             radioVeg.parent().parent().click(handleParentClicked(radioVeg));
-            radioNone.parent().parent().click(handleParentClicked(radioNone));
             radioLambChild.parent().parent().click(handleParentClicked(radioLambChild));
             radioFishChild.parent().parent().click(handleParentClicked(radioFishChild));
             radioVegChild.parent().parent().click(handleParentClicked(radioVegChild));
             radioCustomChild.parent().parent().click(handleParentClicked(radioCustomChild));
-            radioNoneChild.parent().parent().click(handleParentClicked(radioNoneChild));
 
             guestToFieldMap[name] = {
               radioAccept: radioAccept,
+              radioAcceptPartial: radioAcceptPartial,
               radioDecline: radioDecline,
               radioLamb: radioLamb,
               radioFish: radioFish,
               radioVeg: radioVeg,
-              radioNone: radioNone,
               radioLambChild: radioLambChild,
               radioFishChild: radioFishChild,
               radioVegChild: radioVegChild,
               radioCustomChild: radioCustomChild,
-              radioNoneChild: radioNoneChild,
               inputDietary: inputDietary,
               invalidAttendanceFeedback: invalidAttendanceFeedback,
               invalidFoodFeedback: invalidFoodFeedback,
@@ -175,23 +170,22 @@
             for (var i = 0; i < names.length; i++) {
               var name = names[i];
               var accepted = guestToFieldMap[name].radioAccept.prop('checked');
+              var acceptedPartial = guestToFieldMap[name].radioAcceptPartial.prop('checked');
               var declined = guestToFieldMap[name].radioDecline.prop('checked');
               var lamb = guestToFieldMap[name].radioLamb.prop('checked');
               var fish = guestToFieldMap[name].radioFish.prop('checked');
               var veg = guestToFieldMap[name].radioVeg.prop('checked');
-              var none = guestToFieldMap[name].radioNone.prop('checked');
               var lambChild = guestToFieldMap[name].radioLambChild.prop('checked');
               var fishChild = guestToFieldMap[name].radioFishChild.prop('checked');
               var vegChild = guestToFieldMap[name].radioVegChild.prop('checked');
               var customChild = guestToFieldMap[name].radioCustomChild.prop('checked');
-              var noneChild = guestToFieldMap[name].radioNoneChild.prop('checked');
               var dietary = guestToFieldMap[name].inputDietary.val() || '';
               var attendanceFeedback = guestToFieldMap[name].invalidAttendanceFeedback;
               var foodFeedback = guestToFieldMap[name].invalidFoodFeedback;
               var dietaryFeedback = guestToFieldMap[name].invalidDietaryFeedback;
 
-              var validAttendance = accepted || declined;
-              var validFood = declined || (lamb || fish || veg || none || lambChild || fishChild ||vegChild || customChild || noneChild);
+              var validAttendance = accepted || acceptedPartial || declined;
+              var validFood = acceptedPartial || declined || lamb || fish || veg || lambChild || fishChild ||vegChild || customChild;
               var validDietary = dietary.length <= 200;
 
               if (!validAttendance) {
@@ -237,23 +231,19 @@
                     ? 'fish'
                     : veg
                       ? 'veg'
-                      : none
-                        ? 'none'
-                        : lambChild
-                          ? 'lambChild'
-                          : fishChild
-                            ? 'fishChild'
-                            : vegChild
-                              ? 'vegChild'
-                              : noneChild
-                                ? 'noneChild'
-                                : 'customChild';
+                      : lambChild
+                        ? 'lambChild'
+                        : fishChild
+                          ? 'fishChild'
+                          : vegChild
+                            ? 'vegChild'
+                            : 'customChild';
               } else {
                 foodResponse = '';
               }
 
               response[name] = {
-                accepted: !!accepted,
+                accepted: accepted ? 'accepted' : acceptedPartial ? 'partial' : 'declined',
                 food: foodResponse,
                 dietary: dietary
               };
