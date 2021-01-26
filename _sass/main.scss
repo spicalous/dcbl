@@ -77,3 +77,14 @@ html {
     column-count: 3 !important;
   }
 }
+
+.pointer {
+  cursor: pointer;
+}
+
+div:not(.collapsed) > h4 > svg > .chev-down {
+  display: none;
+}
+.collapsed .chev-up {
+  display: none;
+}
