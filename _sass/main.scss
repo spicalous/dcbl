@@ -82,7 +82,7 @@ html {
   cursor: pointer;
 }
 
-div:not(.collapsed) > h4 > svg > .chev-down {
+div:not(.collapsed) > div > svg > .chev-down {
   display: none;
 }
 .collapsed .chev-up {
